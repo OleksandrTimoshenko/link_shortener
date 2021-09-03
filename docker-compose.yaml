@@ -1,0 +1,9 @@
+version: '3.8'
+services: 
+  django:
+    build: .
+    #volumes:
+    #  - /home/alex/Teamvoy/my_projects/links/backend/:/backend/
+    ports: 
+      - 8000:8000
+    command: ./entrypoint.sh

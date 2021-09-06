@@ -1,12 +1,28 @@
 version: '3.8'
-services: 
+services:
+
+  db:
+    image: postgis/postgis:12-2.5-alpine
+    environment:
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB=$DB_NAME
+      - POSTGRES_USER=$DB_USERNAME
+    env_file:
+      - .env
+    expose:
+      - "5432"
+
   django:
     build: .
-    #volumes:
-    #  - /home/alex/Teamvoy/my_projects/links/backend/:/backend/
     expose:
       - "8000"
+    environment:
+      - DB_HOST=db
+    env_file:
+      - .env
     command: ./entrypoint.sh
+    depends_on:
+      - db
 
   nginx:
     image: nginx:1.19.0-alpine

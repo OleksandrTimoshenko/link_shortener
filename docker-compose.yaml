@@ -4,6 +4,23 @@ services:
     build: .
     #volumes:
     #  - /home/alex/Teamvoy/my_projects/links/backend/:/backend/
-    ports: 
-      - 8000:8000
+    expose:
+      - "8000"
     command: ./entrypoint.sh
+
+  nginx:
+    image: nginx:1.19.0-alpine
+    volumes:
+      - nginx-configs:/etc/nginx/conf.d/
+    ports:
+      - 80:80
+    depends_on:
+      - django
+
+volumes:
+   nginx-configs:
+      driver_opts:
+        type: none
+        #device: /opt/nginx/
+        device: /home/alex/Teamvoy/my_projects/links/nginx/
+        o: bind

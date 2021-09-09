@@ -1,0 +1,27 @@
+<html>
+ <head>
+ </head>
+ <body>
+  <button id="myButton" class="float-left submit-button" >Lets shorter some links!</button>
+  <script type="text/javascript">
+      document.getElementById("myButton").onclick = function () {
+          location.href = "graphql";
+      };
+  </script>  
+   <h1>Link Cutter<h1>
+   <h2>Template for create links:</h2>>
+   <pre>
+    mutation {
+      createUrl(fullUrl:"https://www.youtube.com/watch?v=SbKpt9c4DdQ") {
+        url {
+          id
+          fullUrl
+          urlHash
+          clicks
+          createdAt
+        }
+      }
+    }
+   </pre>>
+ </body>
+</html>

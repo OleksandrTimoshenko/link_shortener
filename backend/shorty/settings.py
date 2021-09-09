@@ -58,7 +58,7 @@ ROOT_URLCONF = 'shorty.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'shortener/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

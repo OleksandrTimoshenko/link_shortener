@@ -3,29 +3,43 @@ services:
 
   db:
     image: postgis/postgis:12-2.5-alpine
-    environment:
-      - POSTGRES_PASSWORD=$DB_PASSWORD
-      - POSTGRES_DB=$DB_NAME
-      - POSTGRES_USER=$DB_USERNAME
     env_file:
       - .env
-    expose:
-      - "5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - pastgres_backups:/var/backups/
+    networks:
+      - shortener_network
 
   django:
     image: ghcr.io/oleksandrtimoshenko/shortener_backend
-    expose:
-      - "8000"
     environment:
       - DB_HOST=db
     env_file:
       - .env
     command: ./entrypoint.sh
+    deploy:
+      mode: replicated
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+      restart_policy:
+        condition: on-failure
     depends_on:
       - db
+    networks:
+      - shortener_network
 
   nginx:
     image: ghcr.io/oleksandrtimoshenko/shortener_nginx
+    command: nginx -g "daemon off;"
+    logging:
+      driver: "json-file"
+      options:
+          max-size: "50m"
+          max-file: "30"
     volumes:
       - nginx-configs:/etc/nginx/conf.d/
       - httpasswd:/etc/nginx/secrets/
@@ -33,6 +47,17 @@ services:
       - 80:80
     depends_on:
       - django
+    deploy:
+      mode: replicated
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+        order: start-first
+      restart_policy:
+        condition: on-failure
+    networks:
+      - shortener_network
 
 volumes:
    nginx-configs:
@@ -47,3 +72,14 @@ volumes:
         #device: /opt/nginx/secrets
         device: /home/alex/Teamvoy/my_projects/links/nginx/secrets/
         o: bind
+   pastgres_backups:
+      driver_opts:
+        type: none
+        #device: /var/backups/
+        device: /home/alex/Teamvoy/my_projects/links/backups/
+        o: bind
+   postgres_data:
+
+networks:
+    shortener_network:
+        name: shortener_network

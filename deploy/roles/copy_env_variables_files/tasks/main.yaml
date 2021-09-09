@@ -1,0 +1,12 @@
+---
+- name: add environment file
+  template:
+    src: ../.env
+    dest: /opt/
+
+- name: Copy Nginx authentification credentials
+  copy:
+    src: ../nginx/secrets/{{ item }}
+    dest: /opt/nginx/secrets/{{ item }}
+  with_items:
+    - .htpasswd

@@ -1,0 +1,17 @@
+---
+- name: Create Nginx directiry
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+    mode: 0775
+  with_items:
+    - /opt/nginx/conf/
+    - /opt/nginx/secrets/
+
+- name: Copy Nginx config
+  copy:
+    src: ../nginx/conf/{{ item }}
+    dest: /opt/nginx/conf/{{ item }}
+  with_items:
+    - nginx.conf

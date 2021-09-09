@@ -1,17 +1,34 @@
 version: '3.8'
-services: 
+services:
+
+  db:
+    image: postgis/postgis:12-2.5-alpine
+    environment:
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB=$DB_NAME
+      - POSTGRES_USER=$DB_USERNAME
+    env_file:
+      - .env
+    expose:
+      - "5432"
+
   django:
-    build: .
-    #volumes:
-    #  - /home/alex/Teamvoy/my_projects/links/backend/:/backend/
+    image: ghcr.io/oleksandrtimoshenko/shortener_backend
     expose:
       - "8000"
+    environment:
+      - DB_HOST=db
+    env_file:
+      - .env
     command: ./entrypoint.sh
+    depends_on:
+      - db
 
   nginx:
-    image: nginx:1.19.0-alpine
+    image: ghcr.io/oleksandrtimoshenko/shortener_nginx
     volumes:
       - nginx-configs:/etc/nginx/conf.d/
+      - httpasswd:/etc/nginx/secrets/
     ports:
       - 80:80
     depends_on:
@@ -21,6 +38,12 @@ volumes:
    nginx-configs:
       driver_opts:
         type: none
-        #device: /opt/nginx/
-        device: /home/alex/Teamvoy/my_projects/links/nginx/
+        #device: /opt/nginx/conf
+        device: /home/alex/Teamvoy/my_projects/links/nginx/conf
+        o: bind
+   httpasswd:
+      driver_opts:
+        type: none
+        #device: /opt/nginx/secrets
+        device: /home/alex/Teamvoy/my_projects/links/nginx/secrets/
         o: bind

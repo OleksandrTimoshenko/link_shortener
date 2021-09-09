@@ -200,5 +200,6 @@ pip-selfcheck.json
 
 ### Vagrant Patch ###
 *.box
+/nginx/secrets/*
 
 # End of https://www.toptal.com/developers/gitignore/api/vagrant

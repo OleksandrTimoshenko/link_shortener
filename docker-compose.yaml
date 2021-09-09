@@ -63,20 +63,17 @@ volumes:
    nginx-configs:
       driver_opts:
         type: none
-        #device: /opt/nginx/conf
-        device: /home/alex/Teamvoy/my_projects/links/nginx/conf
+        device: /opt/nginx/conf
         o: bind
    httpasswd:
       driver_opts:
         type: none
-        #device: /opt/nginx/secrets
-        device: /home/alex/Teamvoy/my_projects/links/nginx/secrets/
+        device: /opt/nginx/secrets
         o: bind
    pastgres_backups:
       driver_opts:
         type: none
-        #device: /var/backups/
-        device: /home/alex/Teamvoy/my_projects/links/backups/
+        device: /var/backups/
         o: bind
    postgres_data:
 

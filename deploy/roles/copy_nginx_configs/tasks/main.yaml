@@ -14,4 +14,4 @@
     src: ../nginx/conf/{{ item }}
     dest: /opt/nginx/conf/{{ item }}
   with_items:
-    - nginx.conf
+    - links-shortener.feature-testing.link.conf

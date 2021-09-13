@@ -192,7 +192,7 @@ pip-selfcheck.json
 # Edit at https://www.toptal.com/developers/gitignore?templates=vagrant
 
 ### Vagrant ###
-# Generalф
+# General
 .vagrant/
 
 # Log files (if you are creating logs in debug mode, uncomment this)
@@ -203,3 +203,5 @@ pip-selfcheck.json
 /nginx/secrets/*
 
 # End of https://www.toptal.com/developers/gitignore/api/vagrant
+
+*.pem

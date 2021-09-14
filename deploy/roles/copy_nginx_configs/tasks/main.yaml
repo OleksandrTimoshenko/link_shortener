@@ -12,6 +12,7 @@
 - name: Copy Nginx config
   copy:
     src: ../nginx/conf/{{ item }}
-    dest: /opt/nginx/conf/{{ item }}
+    dest: /opt/nginx/conf/
   with_items:
     - links-shortener.feature-testing.link.conf
+    - default.conf

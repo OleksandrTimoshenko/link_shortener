@@ -1,8 +1,11 @@
 ---
 - name: add environment file
   template:
-    src: ../.env
+    src: ../{{ item }}
     dest: /opt/
+  with_items:
+    - .env
+    - .env.certbot
 
 - name: Copy Nginx authentification credentials
   copy:

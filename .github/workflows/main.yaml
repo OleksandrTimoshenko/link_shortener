@@ -6,6 +6,7 @@ on:
 env:
   BACKEND_IMAGE_NAME: shortener_backend
   NGINX_IMAGE_NAME: shortener_nginx
+  CERTBOT_IMAGE_NAME: dns-route53-certbot
 
 jobs:
   build:
@@ -22,6 +23,9 @@ jobs:
 
       - name: Build nginx image
         run: docker build . --file ./nginx/Dockerfile --tag $NGINX_IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+
+      - name: Build certbot image
+        run: docker build ./certbot --tag $CERTBOT_IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
 
       - name: Log in to registry
         run: echo "${{ secrets.WORKFLOW_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -40,4 +44,12 @@ jobs:
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           docker tag $NGINX_IMAGE_NAME $IMAGE_ID:latest
+          docker push $IMAGE_ID:latest
+
+      - name: Push certbot image
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$CERTBOT_IMAGE_NAME
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          docker tag $CERTBOT_IMAGE_NAME $IMAGE_ID:latest
           docker push $IMAGE_ID:latest

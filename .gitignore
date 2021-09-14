@@ -203,6 +203,9 @@ pip-selfcheck.json
 *.box
 /nginx/secrets/*
 
+#ingnoring node_modules folder
+/node_modules
+
 # End of https://www.toptal.com/developers/gitignore/api/vagrant
 
 *.pem

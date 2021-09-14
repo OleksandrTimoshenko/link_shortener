@@ -14,7 +14,7 @@ CHECK_FREQ="${CHECK_FREQ:-30}"
 check() {
   echo "* Starting dns-route53 initial certificate request script..."
 
-  certonly --dns-route53 --noninteractive --text --expand \
+  certbot certonly --dns-route53 --noninteractive --text --expand \
       ${CERTBOT_DOMAINS}
 
   echo "* Certificate request process finished for domain $DOMAINS"

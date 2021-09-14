@@ -43,10 +43,13 @@ services:
     volumes:
       - nginx-configs:/etc/nginx/conf.d/
       - httpasswd:/etc/nginx/secrets/
+      - common-ssl:/etc/ssl/certs
+      - letsencrypt:/etc/letsencrypt/
     ports:
       - 80:80
-    depends_on:
-      - django
+      - 443:443
+    labels:
+      nginx.proxy: "Certbot"
     deploy:
       mode: replicated
       replicas: 1
@@ -59,7 +62,27 @@ services:
     networks:
       - shortener_network
 
+  certbot:
+    image: ghcr.io/oleksandrtimoshenko/dns-route53-certbot
+    command: /entrypoint.sh
+    env_file:
+      - .env.certbot
+    volumes:
+      - common-ssl:/etc/ssl/certs
+      - letsencrypt:/etc/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      restart_policy:
+          condition: on-failure
+    ports:
+      - 445:443
+    depends_on:
+      - nginx
+
 volumes:
+   postgres_data:
+   common-ssl:
+   letsencrypt:
    nginx-configs:
       driver_opts:
         type: none
@@ -75,7 +98,6 @@ volumes:
         type: none
         device: /var/backups/
         o: bind
-   postgres_data:
 
 networks:
     shortener_network:

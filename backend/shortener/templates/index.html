@@ -1,27 +1,76 @@
 <html>
  <head>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+    rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+    crossorigin="anonymous"
+  >
+  <link rel="stylesheet" href="./app.css">
  </head>
  <body>
-  <button id="myButton" class="float-left submit-button" >Lets shorter some links!</button>
-  <script type="text/javascript">
+    <div class="container main-container">
+      <!-- <button type="myButton" class="btn btn-outline-primary">Primary</button> -->
+
+
+     <div>
+        <h1>Link Cutter<h1>
+        <h2>Template for create links:</h2>
+     </div>
+
+    <div class="highlignt">
+      <pre class="chroma">
+        <code class="language-html" data-lang="html">
+          mutation {
+            createUrl(fullUrl:"https://www.youtube.com/watch?v=SbKpt9c4DdQ") {
+              url {
+                id
+                fullUrl
+                urlHash
+                clicks
+                createdAt
+              }
+            }
+          }
+        </code>
+
+        <div class="bd-clipboard">
+          <button class="btn-clipboard">Copy</button>
+        </div>
+      </pre>
+    </div>
+
+      <div>
+        <button id="myButton" class="float-left submit-button btn btn-outline-primary" >
+          Lets shorter some links!
+        </button>
+      </div>
+    </div>
+
+
+   <script type="text/javascript">
       document.getElementById("myButton").onclick = function () {
           location.href = "graphql";
       };
-  </script>  
-   <h1>Link Cutter<h1>
-   <h2>Template for create links:</h2>>
-   <pre>
-    mutation {
-      createUrl(fullUrl:"https://www.youtube.com/watch?v=SbKpt9c4DdQ") {
-        url {
-          id
-          fullUrl
-          urlHash
-          clicks
-          createdAt
-        }
+
+      function copyToClipboard(elementId) {
+        // Create a "hidden" input
+        var aux = document.createElement("input");
+
+        // Assign it the value of the specified element
+        aux.setAttribute("value", document.getElementById(elementId).innerHTML);
+
+        // Append it to the body
+        document.body.appendChild(aux);
+
+        // Highlight its content
+        aux.select();
+
+        // Copy the highlighted text
+        document.execCommand("copy");
+
+        // Remove it from the body
+        document.body.removeChild(aux);
       }
-    }
-   </pre>>
+  </script> 
  </body>
 </html>

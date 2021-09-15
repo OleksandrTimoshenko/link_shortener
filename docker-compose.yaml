@@ -18,6 +18,8 @@ services:
     env_file:
       - .env
     command: ./entrypoint.sh
+    volumes:
+      - static_data:/static/
     deploy:
       mode: replicated
       replicas: 1
@@ -41,6 +43,7 @@ services:
           max-size: "50m"
           max-file: "30"
     volumes:
+      - static_data:/static/
       - nginx-configs:/etc/nginx/conf.d/
       - httpasswd:/etc/nginx/secrets/
       - common-ssl:/etc/ssl/certs
@@ -80,6 +83,7 @@ services:
       - nginx
 
 volumes:
+   static_data:
    postgres_data:
    common-ssl:
    letsencrypt:

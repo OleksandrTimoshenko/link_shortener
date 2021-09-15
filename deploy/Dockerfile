@@ -9,5 +9,5 @@ RUN apt-get install -y postgresql-client
 RUN apt-get install -y gdal-bin
 RUN pip install -r requirements.txt
 COPY ./backend/ /backend/
-COPY ./static/ /static/
+COPY ./backend_static/ /backend_static/
 EXPOSE 8000

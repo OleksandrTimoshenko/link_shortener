@@ -91,6 +91,7 @@ celerybeat-schedule
 
 # Environments
 .env
+.env.certbot
 .venv
 env/
 venv/
@@ -192,7 +193,7 @@ pip-selfcheck.json
 # Edit at https://www.toptal.com/developers/gitignore?templates=vagrant
 
 ### Vagrant ###
-# Generalф
+# General
 .vagrant/
 
 # Log files (if you are creating logs in debug mode, uncomment this)
@@ -200,5 +201,11 @@ pip-selfcheck.json
 
 ### Vagrant Patch ###
 *.box
+/nginx/secrets/*
+
+#ingnoring node_modules folder
+/node_modules
 
 # End of https://www.toptal.com/developers/gitignore/api/vagrant
+
+*.pem

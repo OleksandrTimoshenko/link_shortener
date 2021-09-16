@@ -1,0 +1,24 @@
+---
+- name: Creates backup directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+  with_items:
+    - /var/backups/daily
+
+- name: Copy scripts for creating backups
+  copy:
+    src: ../scripts/{{ item }}
+    dest: /var/backups/
+    mode: 0755
+  with_items:
+    - create_backups.sh
+
+- name: Creating Cron job for creating backups
+  cron:
+    user: root
+    name: "creating daily backups"
+    minute: "0"
+    hour: "0"
+    job: "/var/backups/create_backups.sh 20"

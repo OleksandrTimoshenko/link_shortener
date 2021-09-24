@@ -209,3 +209,9 @@ pip-selfcheck.json
 # End of https://www.toptal.com/developers/gitignore/api/vagrant
 
 *.pem
+
+# Terraform
+/deploy/terraform/.terraform/
+/deploy/terraform/.terraform*
+/deploy/terraform/terraform*
+!/deploy/terraform/terraform.tfvars.example

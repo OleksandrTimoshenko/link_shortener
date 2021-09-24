@@ -19,6 +19,8 @@ def vagrant_provision(c):
         "cd deploy; \
          REGISTRY_TOKEN=$GITHUB_TOKEN \
 	     REGISTRY_USER=$GITHUB_USER \
+         AWS_ACCESS_KEY=$AWS_ACCESS_KEY \
+         AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
 	     vagrant up --provision;"
     )
 
@@ -27,7 +29,11 @@ def deploy_server(c):
     system(
         "ansible-galaxy install -r deploy/requirements.yaml; ANSIBLE_HOST_KEY_CHECKING=False \
          ansible-playbook -v -i $SERVER_IP, --user $SERVER_USER --private-key $KEY_RSA deploy/playbook.yaml \
-         --extra-vars \"github_user=$GITHUB_USER github_token=$GITHUB_TOKEN\""
+         --extra-vars \"github_user=$GITHUB_USER \
+                        github_token=$GITHUB_TOKEN \
+                        server_user=ubuntu \
+                        aws_access_key=$AWS_ACCESS_KEY\
+                        aws_secret_access_key=$AWS_SECRET_ACCESS_KEY\""
     )
 
 @task

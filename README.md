@@ -9,6 +9,7 @@
 * Invoke >== 1.4.1
 * Ansible >== 3.9.5
 * Vagrant >== 2.2.9
+* Terraform == 1.0.7
 
 # Frontend part
 To generate 'node_module' run *npn install*
@@ -56,3 +57,11 @@ query {
     createdAt  
   }  
 }
+
+# Terraform setup
+* `cd ./deploy/terraform`
+* provide .tfvars file: `cp terraform.tfvars.example terraform.tfvars`
+* setup all needed  variables
+* `terraform init`
+* create all infrastructure: `terraform plan && terraform apply`
+* create only s3 bucket: `terraform plan -target=module.s3 && terraform apply -target=module.s3`

@@ -14,6 +14,7 @@
     mode: 0755
   with_items:
     - create_backups.sh
+    - copy_backups.sh
 
 - name: Creating Cron job for creating backups
   cron:
@@ -21,4 +22,13 @@
     name: "creating daily backups"
     minute: "0"
     hour: "0"
-    job: "/var/backups/create_backups.sh 20"
+    job: "/var/backups/create_backups.sh"
+
+- name: Creating Cron job for copying backups into AWS s3 bucket
+  cron:
+    user: "{{ item.username }}"
+    name: "copy backup to s3 bucket"
+    minute: "10"
+    hour: "0"
+    job: "/var/backups/copy_backups.sh links-backups"
+  with_items: "{{ awscli_users }}"

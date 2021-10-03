@@ -14,7 +14,18 @@
     mode: 0755
   with_items:
     - create_backups.sh
-    - copy_backups.sh
+
+# set default shell for crontab tasks
+- cronvar:
+    name: SHELL
+    value: /bin/bash
+    user: root
+
+# set PATH variable for crontab tasks
+- cronvar:
+    name: PATH
+    value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    user: root
 
 - name: Creating Cron job for creating backups
   cron:
@@ -22,13 +33,4 @@
     name: "creating daily backups"
     minute: "0"
     hour: "0"
-    job: "/var/backups/create_backups.sh"
-
-- name: Creating Cron job for copying backups into AWS s3 bucket
-  cron:
-    user: "{{ item.username }}"
-    name: "copy backup to s3 bucket"
-    minute: "10"
-    hour: "0"
-    job: "/var/backups/copy_backups.sh links-backups"
-  with_items: "{{ awscli_users }}"
+    job: "/var/backups/create_backups.sh links-backups"

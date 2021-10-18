@@ -8,3 +8,6 @@ awscli_users:
         aws_output_format: json
         aws_access_key_id: "{{ aws_access_key }}"
         aws_secret_access_key: "{{ aws_secret_access_key }}"
+domains:
+  vagrant: 'links-shortener-local.conf'
+  stage:   'links-shortener.feature-testing.link.conf'

@@ -4,6 +4,10 @@
 Vagrant.configure("2") do |config|
     config.env.enable
     config.vm.define "server" do |machine|
+      config.vm.provider "virtualbox" do |v|
+        v.memory = 4048
+        v.cpus = 4
+      end
       machine.vm.network "private_network", ip: "10.2.2.25"
       machine.vm.box = "ubuntu/bionic64"
       machine.vm.provision :ansible do |ansible|

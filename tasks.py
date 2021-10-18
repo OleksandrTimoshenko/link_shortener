@@ -33,7 +33,8 @@ def deploy_server(c):
                         github_token=$GITHUB_TOKEN \
                         server_user=ubuntu \
                         aws_access_key=$AWS_ACCESS_KEY\
-                        aws_secret_access_key=$AWS_SECRET_ACCESS_KEY\""
+                        aws_secret_access_key=$AWS_SECRET_ACCESS_KEY \
+                        current_env=stage\""
     )
 
 @task

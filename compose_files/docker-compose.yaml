@@ -29,8 +29,6 @@ services:
         order: start-first
       restart_policy:
         condition: on-failure
-    depends_on:
-      - db
     networks:
       - shortener_network
 
@@ -46,13 +44,8 @@ services:
       - static_data:/backend_static/
       - nginx-configs:/etc/nginx/conf.d/
       - httpasswd:/etc/nginx/secrets/
-      - common-ssl:/etc/ssl/certs
-      - letsencrypt:/etc/letsencrypt/
     ports:
       - 80:80
-      - 443:443
-    labels:
-      nginx.proxy: "Certbot"
     deploy:
       mode: replicated
       replicas: 1
@@ -65,28 +58,9 @@ services:
     networks:
       - shortener_network
 
-  certbot:
-    image: ghcr.io/oleksandrtimoshenko/dns-route53-certbot
-    command: /entrypoint.sh
-    env_file:
-      - .env.certbot
-    volumes:
-      - common-ssl:/etc/ssl/certs
-      - letsencrypt:/etc/letsencrypt
-      - /var/run/docker.sock:/var/run/docker.sock
-    deploy:
-      restart_policy:
-          condition: on-failure
-    ports:
-      - 445:443
-    depends_on:
-      - nginx
-
 volumes:
    static_data:
    postgres_data:
-   common-ssl:
-   letsencrypt:
    nginx-configs:
       driver_opts:
         type: none

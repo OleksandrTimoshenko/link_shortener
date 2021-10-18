@@ -11,8 +11,12 @@
 
 - name: Copy Nginx config
   copy:
-    src: ../nginx/conf/{{ item }}
+    src: ../nginx/conf/{{domains[current_env]}}
     dest: /opt/nginx/conf/
-  with_items:
-    - links-shortener.feature-testing.link.conf
-    - default.conf
+
+# copy default Nginx config for environments with certbot
+- name: Copy default Nginx config
+  copy:
+    src: ../nginx/conf/default.conf
+    dest: /opt/nginx/conf/
+  when: current_env != "vagrant"

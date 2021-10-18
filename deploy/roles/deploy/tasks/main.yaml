@@ -13,10 +13,11 @@
 
 - name: Copy files with owner and permissions
   copy:
-    src: "../{{ item }}"
+    src: "../compose_files/{{ item }}"
     dest: "/opt/{{ item }}"
   loop:
     - docker-compose.yaml
+    - docker-compose.certbot.orerride.yaml
 
 - name: Deploy stack from a compose file
   docker_stack:
@@ -26,3 +27,15 @@
     with_registry_auth: yes
     compose:
       - /opt/docker-compose.yaml
+  when: current_env == 'vagrant'
+
+- name: Deploy stack from a compose file
+  docker_stack:
+    state: present
+    prune: yes
+    name: "{{ project_name }}-stack"
+    with_registry_auth: yes
+    compose:
+      - /opt/docker-compose.yaml
+      - /opt/docker-compose.certbot.orerride.yaml
+  when: current_env != 'vagrant'

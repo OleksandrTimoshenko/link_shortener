@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.shortcuts import render
 from .models import URL
+from django.http import HttpResponse
 
 
 def root(request, url_hash):
@@ -11,3 +12,6 @@ def root(request, url_hash):
 
 def index (request):
     return render(request, 'index.html')
+
+def healthcheck(request):
+    return HttpResponse(status=200)

@@ -20,15 +20,15 @@ services:
     command: ./entrypoint.sh
     volumes:
       - static_data:/backend_static/
+    healthcheck:
+      test: curl -s 127.0.0.1:8000/health || echo 1
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: 2
       update_config:
-        parallelism: 1
-        delay: 10s
         order: start-first
-      restart_policy:
-        condition: on-failure
+        failure_action: rollback
+        delay: 5s
     networks:
       - shortener_network
 
@@ -46,15 +46,21 @@ services:
       - httpasswd:/etc/nginx/secrets/
     ports:
       - 80:80
+    healthcheck:
+      test: nginx -t 2>/dev/null; echo $$?
     deploy:
-      mode: replicated
-      replicas: 1
       update_config:
-        parallelism: 2
-        delay: 10s
         order: start-first
+        failure_action: rollback
+        delay: 10s
+      rollback_config:
+        parallelism: 0
+        order: stop-first
       restart_policy:
-        condition: on-failure
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
     networks:
       - shortener_network
 

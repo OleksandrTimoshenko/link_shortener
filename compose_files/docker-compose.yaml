@@ -20,6 +20,7 @@ services:
     command: ./entrypoint.sh
     volumes:
       - static_data:/backend_static/
+      - django_logs:/backend/
     deploy:
       mode: replicated
       replicas: 1
@@ -31,6 +32,22 @@ services:
         condition: on-failure
     networks:
       - shortener_network
+
+  filebeat:
+    user: root
+    image: ghcr.io/oleksandrtimoshenko/filebeat-gjango
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/containers:/var/lib/docker/containers
+      - /opt/filebeat_config_docker.yml:/usr/share/filebeat/filebeat.yml
+      - django_logs:/etc/django_logs/
+      - /var/log/audit/:/var/log/audit/:ro
+    command: ["--strict.perms=false"]
+    env_file:
+      - .env.filebeat
+    networks:
+      - shortener_network
+
 
   nginx:
     image: ghcr.io/oleksandrtimoshenko/shortener_nginx
@@ -61,6 +78,7 @@ services:
 volumes:
    static_data:
    postgres_data:
+   django_logs:
    nginx-configs:
       driver_opts:
         type: none

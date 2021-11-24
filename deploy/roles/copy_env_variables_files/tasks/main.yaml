@@ -6,6 +6,7 @@
   with_items:
     - .env
     - .env.certbot
+    - .env.filebeat
 
 - name: Copy Nginx authentification credentials
   copy:

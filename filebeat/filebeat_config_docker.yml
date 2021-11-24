@@ -1,0 +1,23 @@
+filebeat.config:
+  modules:
+    path: /usr/share/filebeat/filebeat.yml
+    reload.enabled: false
+
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /etc/django_logs/django.conf
+
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+
+processors:
+- add_cloud_metadata: ~
+
+output.logstash:
+  hosts: '${LOGSTASH_HOSTS:localhost:9200}'
+  username: '${LOGSTASH_USERNAME:}'
+  password: '${LOGSTASH_PASSWORD:}'

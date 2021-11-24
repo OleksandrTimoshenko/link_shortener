@@ -11,13 +11,20 @@
     # only for local testing with Vagrant
     advertise_addr: "10.2.2.25"
 
-- name: Copy files with owner and permissions
+- name: Copy compose files
   copy:
     src: "../compose_files/{{ item }}"
     dest: "/opt/{{ item }}"
   loop:
     - docker-compose.yaml
     - docker-compose.certbot.orerride.yaml
+
+- name: Copy filebeat config
+  copy:
+    src: "../filebeat/{{ item }}"
+    dest: "/opt/{{ item }}"
+  loop:
+    - filebeat_config_docker.yml
 
 - name: Deploy stack from a compose file
   docker_stack:

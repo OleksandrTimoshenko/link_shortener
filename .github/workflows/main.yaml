@@ -62,3 +62,27 @@ jobs:
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           docker tag $CERTBOT_IMAGE_NAME $IMAGE_ID:latest
           docker push $IMAGE_ID:latest
+
+      - name: Run backend image security scanning
+        run: |
+          trivy --light $BACKEND_IMAGE_NAME
+          # number of critical vulnerabilities in container OS +  installed python-pkg
+          number_of_critical_vulnerabilities=$(trivy image  --format json ${BACKEND_IMAGE_NAME} | grep CRITICAL | wc -l)
+          echo "Founded $number_of_critical_vulnerabilities critical security vulnerabilities."
+          if [ $(($number_of_critical_vulnerabilities)) -gt 100 ]; then exit 1; fi
+
+      - name: Run Nginx image security scanning
+        run: |
+          trivy --light $NGINX_IMAGE_NAME
+          # number of critical vulnerabilities in container OS +  installed python-pkg
+          number_of_critical_vulnerabilities=$(trivy image  --format json ${NGINX_IMAGE_NAME} | grep CRITICAL | wc -l)
+          echo "Founded $number_of_critical_vulnerabilities critical security vulnerabilities."
+          if [ $(($number_of_critical_vulnerabilities)) -gt 100 ]; then exit 1; fi
+
+      - name: Run Certbot image security scanning
+        run: |
+          trivy --light $CERTBOT_IMAGE_NAME
+          # number of critical vulnerabilities in container OS +  installed python-pkg
+          number_of_critical_vulnerabilities=$(trivy image  --format json ${CERTBOT_IMAGE_NAME} | grep CRITICAL | wc -l)
+          echo "Founded $number_of_critical_vulnerabilities critical security vulnerabilities."
+          if [ $(($number_of_critical_vulnerabilities)) -gt 100 ]; then exit 1; fi

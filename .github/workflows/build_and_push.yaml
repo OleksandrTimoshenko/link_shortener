@@ -78,6 +78,7 @@ jobs:
       - name: Run backend image security scanning
         run: |
           BACKEND_IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/$BACKEND_IMAGE_NAME
+          BACKEND_IMAGE_NAME=$(echo $BACKEND_IMAGE_NAME | tr '[A-Z]' '[a-z]')
           trivy image $BACKEND_IMAGE_NAME
           # number of critical vulnerabilities in container OS +  installed python-pkg
           number_of_critical_vulnerabilities=$(trivy image  --format json ${BACKEND_IMAGE_NAME} | grep CRITICAL | wc -l)
@@ -88,6 +89,7 @@ jobs:
       - name: Run Nginx image security scanning
         run: |
           NGINX_IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/$NGINX_IMAGE_NAME
+          NGINX_IMAGE_NAME=$(echo $NGINX_IMAGE_NAME | tr '[A-Z]' '[a-z]')
           trivy image $NGINX_IMAGE_NAME
           # number of critical vulnerabilities in container OS +  installed python-pkg
           number_of_critical_vulnerabilities=$(trivy image  --format json ${NGINX_IMAGE_NAME} | grep CRITICAL | wc -l)
@@ -97,6 +99,7 @@ jobs:
       - name: Run Certbot image security scanning
         run: |
           CERTBOT_IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/$CERTBOT_IMAGE_NAME
+          CERTBOT_IMAGE_NAME=$(echo $CERTBOT_IMAGE_NAME | tr '[A-Z]' '[a-z]')
           trivy image $CERTBOT_IMAGE_NAME
           # number of critical vulnerabilities in container OS +  installed python-pkg
           number_of_critical_vulnerabilities=$(trivy image  --format json ${CERTBOT_IMAGE_NAME} | grep CRITICAL | wc -l)

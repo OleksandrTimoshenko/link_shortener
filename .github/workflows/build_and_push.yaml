@@ -32,27 +32,15 @@ jobs:
 
       - name: Push backend image
         run: |
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$BACKEND_IMAGE_NAME
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          docker tag $BACKEND_IMAGE_NAME $IMAGE_ID:latest
-          docker push $IMAGE_ID:latest
+          ./scripts/push_images.sh ${{ github.repository_owner }} $BACKEND_IMAGE_NAME
 
       - name: Push nginx image
         run: |
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$NGINX_IMAGE_NAME
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          docker tag $NGINX_IMAGE_NAME $IMAGE_ID:latest
-          docker push $IMAGE_ID:latest
+          ./scripts/push_images.sh ${{ github.repository_owner }} $NGINX_IMAGE_NAME
 
       - name: Push certbot image
         run: |
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$CERTBOT_IMAGE_NAME
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          docker tag $CERTBOT_IMAGE_NAME $IMAGE_ID:latest
-          docker push $IMAGE_ID:latest
+          ./scripts/push_images.sh ${{ github.repository_owner }} $CERTBOT_IMAGE_NAME
 
   security_scanning:
     needs: build
@@ -77,31 +65,12 @@ jobs:
 
       - name: Run backend image security scanning
         run: |
-          BACKEND_IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/$BACKEND_IMAGE_NAME
-          BACKEND_IMAGE_NAME=$(echo $BACKEND_IMAGE_NAME | tr '[A-Z]' '[a-z]')
-          trivy image $BACKEND_IMAGE_NAME
-          # number of critical vulnerabilities in container OS +  installed python-pkg
-          number_of_critical_vulnerabilities=$(trivy image  --format json ${BACKEND_IMAGE_NAME} | grep CRITICAL | wc -l)
-          echo "Founded $number_of_critical_vulnerabilities critical security vulnerabilities."
-          #if [ $(($number_of_critical_vulnerabilities)) -gt 0 ]; then exit 1; fi
-          # outdated python packeges
+          ./scripts/security_scanning.sh ${{ github.repository_owner }} $BACKEND_IMAGE_NAME
 
       - name: Run Nginx image security scanning
         run: |
-          NGINX_IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/$NGINX_IMAGE_NAME
-          NGINX_IMAGE_NAME=$(echo $NGINX_IMAGE_NAME | tr '[A-Z]' '[a-z]')
-          trivy image $NGINX_IMAGE_NAME
-          # number of critical vulnerabilities in container OS +  installed python-pkg
-          number_of_critical_vulnerabilities=$(trivy image  --format json ${NGINX_IMAGE_NAME} | grep CRITICAL | wc -l)
-          echo "Founded $number_of_critical_vulnerabilities critical security vulnerabilities."
-          if [ $(($number_of_critical_vulnerabilities)) -gt 0 ]; then exit 1; fi
+          ./scripts/security_scanning.sh ${{ github.repository_owner }} $NGINX_IMAGE_NAME
 
       - name: Run Certbot image security scanning
         run: |
-          CERTBOT_IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/$CERTBOT_IMAGE_NAME
-          CERTBOT_IMAGE_NAME=$(echo $CERTBOT_IMAGE_NAME | tr '[A-Z]' '[a-z]')
-          trivy image $CERTBOT_IMAGE_NAME
-          # number of critical vulnerabilities in container OS +  installed python-pkg
-          number_of_critical_vulnerabilities=$(trivy image  --format json ${CERTBOT_IMAGE_NAME} | grep CRITICAL | wc -l)
-          echo "Founded $number_of_critical_vulnerabilities critical security vulnerabilities."
-          if [ $(($number_of_critical_vulnerabilities)) -gt 0 ]; then exit 1; fi
+          ./scripts/security_scanning.sh ${{ github.repository_owner }} $CERTBOT_IMAGE_NAME

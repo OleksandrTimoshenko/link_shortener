@@ -129,32 +129,35 @@ GRAPHENE = {
 }
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'simple': {
-            'format': '[%(asctime)s] %(levelname)s|%(name)s|%(message)s',
-            'datefmt': '%Y-%m-%d %H:%M:%S',
+  'version': 1,
+  'disable_existing_loggers': False,
+  'formatters': {
+      'simple': {
+            'format': 'velname)s %(message)s'
         },
-    },
-    'handlers': {
-        'file': {
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '/backend/django.log',
-            'maxBytes': 1024*1024*15,  # 15MB
-            'backupCount': 10,
-            'formatter': 'simple',
-        },
+  },
+  'handlers': {
         'console': {
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
+            'formatter': 'simple'
         },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file', 'console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        'logstash': {
+            'level': 'INFO',
+            'class': 'logstash.TCPLogstashHandler',
+            'host': env("LOGSTASH_IP", default="localhost"),
+            'port': env("LOGSTASH_PORT", default=9200),
+            'version': 1,
+            'message_type': 'django',  # 'type' for logstash message.
+            'fqdn': False,
+            'tags': ['django'],
+        },
+  },
+  'loggers': {
+        'django.request': {
+            'handlers': ['logstash'],
+            'level': 'INFO',
             'propagate': True,
         },
-    },
+    }
 }

@@ -7,7 +7,11 @@ filebeat.inputs:
 - type: log
   enabled: true
   paths:
-    - /etc/django_logs/django.conf
+      - /var/log/nginx/access.log
+  fields:
+    type: nginx
+  fields_under_root: true
+  scan_frequency: 5s
 
 filebeat.autodiscover:
   providers:

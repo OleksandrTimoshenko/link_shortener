@@ -7,6 +7,7 @@ env:
   BACKEND_IMAGE_NAME: shortener_backend
   NGINX_IMAGE_NAME: shortener_nginx
   CERTBOT_IMAGE_NAME: dns-route53-certbot
+  FILEBEAT_IMAGE_NAME: filebeat-gjango
 
 jobs:
   build:
@@ -23,6 +24,10 @@ jobs:
 
       - name: Build nginx image
         run: docker build . --file ./nginx/Dockerfile --tag $NGINX_IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+
+
+      - name: Build filebeat image
+        run: docker build ./filebeat --tag $FILEBEAT_IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
 
       - name: Build certbot image
         run: docker build ./certbot --tag $CERTBOT_IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
@@ -41,6 +46,10 @@ jobs:
       - name: Push certbot image
         run: |
           ./scripts/push_images.sh ${{ github.repository_owner }} $CERTBOT_IMAGE_NAME
+
+      - name: Push filebeat image
+        run: |
+          ./scripts/push_images.sh ${{ github.repository_owner }} $FILEBEAT_IMAGE_NAME
 
   security_scanning:
     needs: build

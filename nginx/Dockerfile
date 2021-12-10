@@ -1,4 +1,4 @@
-FROM nginx:1.19.0-alpine
+FROM nginx:alpine
 
 RUN apk add apache2-utils
 RUN mkdir -p /home/app/web \

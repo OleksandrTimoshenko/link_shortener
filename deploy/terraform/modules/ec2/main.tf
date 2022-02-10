@@ -52,3 +52,11 @@ resource "aws_instance" "ec2_public" {
   }
 
 }
+
+  // add elastis IP to the new server
+  resource "aws_eip" "ec2_public" {
+    instance = "${aws_instance.ec2_public.id}"
+    tags = {
+      Name = "ec2_public_eip"
+    }
+  }

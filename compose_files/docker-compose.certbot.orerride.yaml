@@ -8,6 +8,8 @@ services:
     volumes:
       - common-ssl:/etc/ssl/certs
       - letsencrypt:/etc/letsencrypt/
+    networks:
+      - shortener_network
 
   certbot:
     image: ghcr.io/oleksandrtimoshenko/dns-route53-certbot
@@ -21,8 +23,8 @@ services:
     deploy:
       restart_policy:
           condition: on-failure
-    ports:
-      - 445:443
+    networks:
+      - shortener_network
 
 volumes:
    common-ssl:

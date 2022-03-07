@@ -19,3 +19,8 @@ module "ec2" {
   sg_pub_id  = module.networking.sg_pub_id
   key_name   = module.ssh-key.key_name
 }
+
+module "route53" {
+  source = "./modules/route53"
+  public_ip = module.ec2.public_ip
+}

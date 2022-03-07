@@ -20,7 +20,7 @@ To generate 'node_module' run *npn install*
 * Create .env.certbot file: `cp .env.certbot.example .env.certbot`
 * Provide all needed variables into this two files
 * Create folder for store nginx secrets: `mkdir ./nginx/secrets/`
-* Add file with encrypted password: `echo "user:$apr1$OQJXr62u$68KdGsExAk3xPUjeo7Llg1" > ./nginx/secrets/.htpasswd`
+* Add file with encrypted password: `echo "user:$apr1$1MZcXFMY$pgIhGajf7SYhqyC9Hpfri/" > ./nginx/secrets/.htpasswd`
 
 # Vagrant setup
 * Install required vagrant plugins: `invoke install-vagrant-plugins`
@@ -31,6 +31,10 @@ To generate 'node_module' run *npn install*
 * Deploy server: `invoke deploy-server`
 
 # GrapfQL
+
+## Credentials for login
+### login:    user
+### password: pass
 ## add new alias
 mutation {  
     createUrl(fullUrl:  

@@ -1,20 +1,8 @@
 version: '3.8'
 services:
 
-  db:
-    image: postgis/postgis:12-2.5-alpine
-    env_file:
-      - .env
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-      - pastgres_backups:/var/backups/
-    networks:
-      - shortener_network
-
   django:
     image: ghcr.io/oleksandrtimoshenko/shortener_backend
-    environment:
-      - DB_HOST=db
     env_file:
       - .env
     command: ./entrypoint.sh
@@ -60,7 +48,6 @@ services:
 
 volumes:
    static_data:
-   postgres_data:
    nginx-configs:
       driver_opts:
         type: none
@@ -70,11 +57,6 @@ volumes:
       driver_opts:
         type: none
         device: /opt/nginx/secrets
-        o: bind
-   pastgres_backups:
-      driver_opts:
-        type: none
-        device: /var/backups/
         o: bind
 
 networks:

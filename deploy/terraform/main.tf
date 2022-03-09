@@ -24,3 +24,12 @@ module "route53" {
   source = "./modules/route53"
   public_ip = module.ec2.public_ip
 }
+
+module "rds" {
+  source = "./modules/rds"
+  db_name = var.db_name
+  db_user = var.db_user
+  db_password = var.db_password
+  engine  = "postgres"
+  engine_version = "12"
+}

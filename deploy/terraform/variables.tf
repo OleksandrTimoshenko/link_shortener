@@ -17,3 +17,21 @@ variable "region" {
   default     = "us-east-1"
   type        = string
 }
+
+variable "db_name" {
+  description = "AWS RDS DB user"
+  type = string
+  default = "postgres"
+}
+
+variable "db_user" {
+  description = "AWS RDS DB user"
+  type = string
+  default = "postgres"
+}
+
+variable "db_password" {
+  description = "AWS RDS DB password"
+  sensitive = true
+  type = string
+}
